@@ -186,7 +186,7 @@ impl WranglerToml {
         wrangler_toml
     }
 
-    pub fn zoned_single_route_with_env(
+    pub fn zoned_single_route_with_env_and_account_id(
         name: &'static str,
         zone_id: &'static str,
         route: &'static str,
@@ -194,6 +194,7 @@ impl WranglerToml {
     ) -> WranglerToml {
         let wrangler_toml = WranglerToml {
             env: Some(test_env(env_config)),
+            account_id: Some("fakeaccountid"),
             ..WranglerToml::zoned_single_route(name, zone_id, route)
         };
         eprintln!("{:#?}", &wrangler_toml);

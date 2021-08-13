@@ -644,7 +644,8 @@ fn when_top_level_empty_env_zoned_single_route() {
     let env_config = EnvConfig::zoned_single_route(ZONE_ID, PATTERN);
 
     let script_name = "top_level_empty_env_zoned_single_route_no_zone_id";
-    let test_toml = WranglerToml::with_env(script_name, env_config);
+    let mut test_toml = WranglerToml::with_env(script_name, env_config);
+    test_toml.account_id = Some("fakeaccountid");
     let toml_string = toml::to_string(&test_toml).unwrap();
     let manifest = Manifest::from_str(&toml_string).unwrap();
 
@@ -720,7 +721,8 @@ fn when_top_level_empty_zoned_multi_route_env() {
     let env_config = EnvConfig::zoned_multi_route(ZONE_ID, patterns.to_vec());
 
     let script_name = "top_level_empty_env_zoned_multi_route_no_zone_id";
-    let test_toml = WranglerToml::with_env(script_name, env_config);
+    let mut test_toml = WranglerToml::with_env(script_name, env_config);
+    test_toml.account_id = Some("fakeaccountid");
     let toml_string = toml::to_string(&test_toml).unwrap();
     let manifest = Manifest::from_str(&toml_string).unwrap();
 
@@ -852,8 +854,9 @@ fn when_top_level_zoneless_env_zoned_single_route() {
 
     let script_name = "top_level_zoneless_env_zoned_single_route_no_zone_id";
     let workers_dev = true;
-    let test_toml =
+    let mut test_toml =
         WranglerToml::zoneless_with_env(script_name, ACCOUNT_ID, workers_dev, env_config);
+    test_toml.account_id = Some("fakeaccountid");
     let toml_string = toml::to_string(&test_toml).unwrap();
     let manifest = Manifest::from_str(&toml_string).unwrap();
 
@@ -1002,8 +1005,12 @@ fn when_top_level_zoned_env_empty() {
     let env_config = EnvConfig::default();
 
     let script_name = "top_level_zoned_env_empty";
-    let test_toml =
-        WranglerToml::zoned_single_route_with_env(script_name, ZONE_ID, PATTERN, env_config);
+    let test_toml = WranglerToml::zoned_single_route_with_env_and_account_id(
+        script_name,
+        ZONE_ID,
+        PATTERN,
+        env_config,
+    );
     let toml_string = toml::to_string(&test_toml).unwrap();
     let manifest = Manifest::from_str(&toml_string).unwrap();
 
@@ -1019,8 +1026,12 @@ fn when_top_level_zoned_env_zoneless_workers_dev_false() {
     let env_config = EnvConfig::zoneless_with_account_id(workers_dev, ACCOUNT_ID);
 
     let script_name = "top_level_zoned_env_zoneless_workers_dev_false";
-    let test_toml =
-        WranglerToml::zoned_single_route_with_env(script_name, ZONE_ID, PATTERN, env_config);
+    let test_toml = WranglerToml::zoned_single_route_with_env_and_account_id(
+        script_name,
+        ZONE_ID,
+        PATTERN,
+        env_config,
+    );
     let toml_string = toml::to_string(&test_toml).unwrap();
     let manifest = Manifest::from_str(&toml_string).unwrap();
 
@@ -1036,8 +1047,12 @@ fn when_top_level_zoned_env_zoneless_workers_dev_true() {
     let env_config = EnvConfig::zoneless_with_account_id(workers_dev, ACCOUNT_ID);
 
     let script_name = "when_top_level_zoned_env_zoneless_workers_dev_true";
-    let test_toml =
-        WranglerToml::zoned_single_route_with_env(script_name, ZONE_ID, PATTERN, env_config);
+    let test_toml = WranglerToml::zoned_single_route_with_env_and_account_id(
+        script_name,
+        ZONE_ID,
+        PATTERN,
+        env_config,
+    );
     let toml_string = toml::to_string(&test_toml).unwrap();
     let manifest = Manifest::from_str(&toml_string).unwrap();
 
@@ -1058,8 +1073,12 @@ fn when_top_level_zoned_env_zoned_single_route_route_empty() {
     let env_config = EnvConfig::zoned_single_route(ZONE_ID, env_pattern);
 
     let script_name = "top_level_zoned_env_zoned_single_route_empty";
-    let test_toml =
-        WranglerToml::zoned_single_route_with_env(script_name, ZONE_ID, PATTERN, env_config);
+    let test_toml = WranglerToml::zoned_single_route_with_env_and_account_id(
+        script_name,
+        ZONE_ID,
+        PATTERN,
+        env_config,
+    );
     let toml_string = toml::to_string(&test_toml).unwrap();
     let manifest = Manifest::from_str(&toml_string).unwrap();
 
@@ -1075,8 +1094,12 @@ fn when_top_level_zoned_env_zoned_single_route_zone_id_missing() {
     let env_config = EnvConfig::zoned_single_route("", env_pattern);
 
     let script_name = "top_level_zoned_env_zoned_single_route_no_zone_id";
-    let test_toml =
-        WranglerToml::zoned_single_route_with_env(script_name, ZONE_ID, PATTERN, env_config);
+    let test_toml = WranglerToml::zoned_single_route_with_env_and_account_id(
+        script_name,
+        ZONE_ID,
+        PATTERN,
+        env_config,
+    );
     let toml_string = toml::to_string(&test_toml).unwrap();
     let manifest = Manifest::from_str(&toml_string).unwrap();
 
@@ -1105,8 +1128,12 @@ fn when_top_level_zoned_env_zoned_single_route() {
     let env_config = EnvConfig::zoned_single_route(env_zone_id, env_pattern);
 
     let script_name = "top_level_zoned_env_zoned_single_route_no_zone_id";
-    let test_toml =
-        WranglerToml::zoned_single_route_with_env(script_name, ZONE_ID, PATTERN, env_config);
+    let test_toml = WranglerToml::zoned_single_route_with_env_and_account_id(
+        script_name,
+        ZONE_ID,
+        PATTERN,
+        env_config,
+    );
     let toml_string = toml::to_string(&test_toml).unwrap();
     let manifest = Manifest::from_str(&toml_string).unwrap();
 
