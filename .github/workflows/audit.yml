@@ -1,0 +1,43 @@
+name: Audit
+
+on:
+  push:
+  pull_request:
+    paths:
+      - "**/Cargo.toml"
+      - "**/Cargo.lock"
+      - "**/package-lock.json"
+      - "**/npm-shrinkwrap.json"
+  schedule:
+    - cron: "0 0 * * *"
+
+jobs:
+  security_audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: cargo audit
+        uses: actions-rs/audit-check@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: npm audit
+        uses: oke-py/npm-audit-action@v1.7.3
+        with:
+          dedupe_issues: true
+          working_directory: npm
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: changelog-generator audit
+        uses: oke-py/npm-audit-action@v1.7.3
+        with:
+          dedupe_issues: true
+          working_directory: changelog-generator
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+      # wranglerjs doesn't check-in package-lock.json
+      - name: generate wranglerjs lockfile
+        run: cd wranglerjs && npm i --package-lock-only
+      - name: wranglerjs audit
+        uses: oke-py/npm-audit-action@v1.7.3
+        with:
+          dedupe_issues: true
+          working_directory: wranglerjs
+          github_token: ${{ secrets.GITHUB_TOKEN }}
